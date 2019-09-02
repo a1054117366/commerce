@@ -29,7 +29,7 @@ public class BrandServiceImpl implements BrandService {
     private BrandMapper brandMapper;
 
     /**
-     * 查询所有Brand内容
+     * 查询所有商品
      * @return
      */
     @Override
@@ -53,7 +53,7 @@ public class BrandServiceImpl implements BrandService {
 
     /**
      * 条件查询
-     * @param searchMap
+     * @param searchMap 查询条件
      * @return
      */
     @Override
@@ -62,6 +62,13 @@ public class BrandServiceImpl implements BrandService {
         return brandMapper.selectByExample(example);
     }
 
+    /**
+     * 条件分页查询
+     * @param searchMap 查询条件
+     * @param page  当前页
+     * @param size  每页显示条数
+     * @return
+     */
     @Override
     public PageResult<Brand> findPage(Map<String, Object> searchMap, int page, int size) {
         PageHelper.startPage(page,size);

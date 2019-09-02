@@ -22,7 +22,7 @@ public class BrandController {
     @Reference
     private BrandService brandService;
 
-    @GetMapping("/findAll")
+    @GetMapping("/findAll")//get请求
     public List<Brand> findAll(){
         return brandService.findAll();
     }
@@ -32,8 +32,13 @@ public class BrandController {
         return brandService.findPage(page, size);
     }
 
-    @PostMapping("/findList")
-    public List<Brand> findList(@RequestBody Map<String,Object> searchMap){
+    @PostMapping("/findList")//post请求
+    public List<Brand> findList(@RequestBody Map<String,Object> searchMap){//将前端传输过来的json串解析成Map数据
         return brandService.findList(searchMap);
+    }
+
+    @GetMapping("/findPage")
+    public PageResult<Brand> findPage(@RequestBody Map<String, Object> searchMap,int page,int size){
+        return brandService.findPage(searchMap,page, size);
     }
 }
