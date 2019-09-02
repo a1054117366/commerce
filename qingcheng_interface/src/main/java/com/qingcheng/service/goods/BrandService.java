@@ -11,4 +11,5 @@ public interface BrandService {
     PageResult<Brand> findPage(int page,int size);
     List<Brand> findList(Map<String,Object> searchMap);
     PageResult<Brand> findPage(Map<String,Object> searchMap,int page,int size);
+    Brand findById(Integer id);
 }

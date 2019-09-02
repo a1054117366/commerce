@@ -41,4 +41,9 @@ public class BrandController {
     public PageResult<Brand> findPage(@RequestBody Map<String, Object> searchMap,int page,int size){
         return brandService.findPage(searchMap,page, size);
     }
+
+    @GetMapping("/findById")
+    public Brand findById(Integer id){
+        return brandService.findById(id);
+    }
 }

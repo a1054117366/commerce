@@ -78,6 +78,16 @@ public class BrandServiceImpl implements BrandService {
     }
 
     /**
+     * 根据id查询商品
+     * @param id 商品id
+     * @return
+     */
+    @Override
+    public Brand findById(Integer id) {
+        return brandMapper.selectByPrimaryKey(id);
+    }
+
+    /**
      * 构建条件查询
      * @param searchMap
      * @return
