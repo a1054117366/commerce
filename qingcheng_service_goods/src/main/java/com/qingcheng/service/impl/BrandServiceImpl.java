@@ -145,7 +145,7 @@ public class BrandServiceImpl implements BrandService {
                 criteria.andLike("name", "%" + searchMap.get("name") + "%");
             }
             //首字母
-            if (searchMap.get("letter") != null && "".equals(searchMap.get("letter"))) {
+            if (searchMap.get("letter") != null && !"".equals(searchMap.get("letter"))) {
                 criteria.andEqualTo("letter", searchMap.get("letter"));
             }
         }

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌管理</title>
+    <link rel="stylesheet" href="../css/elementui.css">
+    <script src="../js/axios.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/elementui.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--弹出窗口-->
+    <el-dialog title="编辑" :visible.sync="formVisible" >
+        <el-form label-width="80px">
+            <el-form-item label="品牌名称">
+                <el-input placeholder="品牌名称" v-model="pojo.name"></el-input>
+            </el-form-item>
+            <el-form-item label="品牌首字母">
+                <el-input placeholder="品牌首字母" v-model="pojo.letter"></el-input>
+            </el-form-item>
+            <el-form-item label="品牌图片">
+                <el-input placeholder="品牌图片" v-model="pojo.image"></el-input>
+            </el-form-item>
+            <el-form-item label="排序">
+                <el-input placeholder="排序" v-model="pojo.seq"></el-input></el-form-item>
+            <el-form-item>
+                <el-button @click="save()">保存</el-button>
+                <el-button @click="formVisible = false">关闭</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+    <!--条件查询-->
+    <el-form :inline="true"  class="demo-form-inline">
+        <el-form-item label="品牌名称">
+            <el-input v-model="searchMap.name" placeholder="品牌名称"></el-input>
+        </el-form-item>
+        <el-form-item label="品牌首字母">
+            <el-input v-model="searchMap.letter" placeholder="品牌首字母"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="fetchData()">查询</el-button>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="formVisible=true">新增</el-button>
+        </el-form-item>
+    </el-form>
+    <!--表单-->
+    <el-table :data="tableData" border style="width: 100%">
+        <el-table-column prop="id" label="ID" width="180"></el-table-column>
+        <el-table-column prop="name" label="名称" width="180"></el-table-column>
+        <el-table-column prop="letter" label="首字母"></el-table-column>
+        <el-table-column label="图片" width="180">
+            <template slot-scope="scope">
+                <img :src="scope.row.image">
+            </template>
+        </el-table-column>
+        <el-table-column prop="seq" label="排序"></el-table-column>
+        <el-table-column label="操作">
+            <template slot-scope="scope">
+                <el-button @click="edit(scope.row.id)" type="text" size="small">修改</el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+    <!--分页-->
+    <el-pagination
+            @size-change="fetchData"
+            @current-change="fetchData"
+            :current-page.sync="currentPage"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size.sync="size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+    </el-pagination>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                tableData: [],
+                currentPage: 1,
+                total: 10,
+                size: 10,
+                searchMap:{},
+                formVisible: false,
+                pojo:{}
+            }
+        },
+        created() {
+            this.fetchData();
+        },
+        methods: {
+            fetchData() {
+                axios.post(`/brand/findPage.do?page=${this.currentPage}&size=${this.size}`,this.searchMap).then(response => {
+                    this.tableData = response.data.rows;
+                    this.total = response.data.total;
+                });
+            },
+            save(){
+                axios.post(`/brand/${this.pojo.id==null?'add':'update'}.do`,this.pojo).then(response => {
+                    this.fetchData();//添加成功后刷新列表
+                    this.formVisible = false;//关闭弹窗
+                })
+            },
+            edit (id){
+                this.formVisible = true;// 打开窗口
+                // 调用查询
+                axios.get(`/brand/findById.do?id=${id}`).then(response => {
+                    this.pojo = response.data;
+                })
+            }
+        }
+
+    })
+</script>
+</html>
